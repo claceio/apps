@@ -1,0 +1,11 @@
+{
+  "routing": {
+    "template_locations": [
+      "*.go.html"
+    ],
+    "push_events": false
+  },
+  "htmx": {
+    "version": "1.9.2"
+  }
+}
