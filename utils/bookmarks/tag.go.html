@@ -1,0 +1,40 @@
+{{ $bookmark_tab_active := "" }}
+{{ $tag_tab_active := "tab-active" }}
+
+{{ template "header" . }}
+
+
+<div>
+  <div class="py-6 pb-2 pl-4 grid grid-cols-6">
+    <label class="col-start-1 col-span-2 text-l font-light text-sky-700">
+      <b>Recent Tags</b>
+    </label>
+  </div>
+
+  <div>
+    <table class="table table-zebra text-md font-mono">
+      <thead>
+        <tr>
+          <th>Tag</th>
+          <th>Links</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{ range $i, $t := .Data.Tags }}
+          <tr>
+            <td>
+              <div class="badge badge-secondary">{{ $t.tag }}</div>
+            </td>
+            <td>
+              {{ range $u, $url := $t.urls }}
+                <a class="link " href="{{ $url }}">{{ $url }}</a>
+              {{ end }}
+            </td>
+          </tr>
+        {{ end }}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{{ template "footer" . }}

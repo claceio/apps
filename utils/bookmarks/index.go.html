@@ -1,0 +1,79 @@
+{{ $bookmark_tab_active := "tab-active" }}
+{{ $tag_tab_active := "" }}
+
+{{ template "header" . }}
+
+
+<div>
+  <div id="create-bookmark" class="p-4">
+    <!-- Your form and other content here -->
+
+    <div class="grid grid-cols-6">
+      <label class="my-4 col-start-1 col-span-2 text-l font-light text-sky-400">
+        <b>Create Bookmark</b>
+      </label>
+    </div>
+
+    <form
+      action="{{ .AppPath }}/create"
+      method="post"
+      class="grid grid-cols-12 gap-2">
+      <input
+        class="pt-1 col-start-1 col-span-4 input input-primary "
+        placeholder="Link"
+        type="url"
+        name="url"
+        size="40" />
+
+      <select
+        id="tags-select"
+        name="tags"
+        class="col-start-5 col-span-6 select select-multiple"
+        style="border-color: #0284c7; border-width: 1px;"
+        multiple
+        placeholder="Enter tags...">
+        {{ range $i, $tag := .Data.Tags }}
+          <option value="{{ $tag }}">{{ $tag }}</option>
+        {{ end }}
+      </select>
+
+      <input
+        type="submit"
+        value="Create"
+        class="btn btn-primary rounded-md  col-start-11 col-span-2 font-bold" />
+    </form>
+  </div>
+
+  <div class="py-6 pb-2 pl-4 grid grid-cols-6">
+    <label class="col-start-1 col-span-2 text-l font-light text-sky-400">
+      <b>Recent Bookmarks</b>
+    </label>
+  </div>
+
+  <div>
+    <table class="table table-zebra text-md font-mono">
+      <thead>
+        <tr>
+          <th>Link</th>
+          <th>Tags</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{ range $i, $b := .Data.Bookmarks }}
+          <tr>
+            <td>
+              <a class="link" href="{{ $b.url }}">{{ $b.url }}</a>
+            </td>
+            <td>
+              {{ range $t, $tag := $b.tags }}
+                <div class="badge badge-secondary">{{ $tag }}</div>
+              {{ end }}
+            </td>
+          </tr>
+        {{ end }}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{{ template "footer" . }}
