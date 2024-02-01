@@ -25,8 +25,8 @@ The app should be available at https://localhost:25223/utils/bookmarks. Use `adm
 
 # Application Listing
 
-|     App Name     |                  Install Url                  |                        Description                         |             System Requirements             |
-| :--------------: | :-------------------------------------------: | :--------------------------------------------------------: | :-----------------------------------------: |
-| Bookmark Manager |   `github.com/claceio/apps/utils/bookmarks`   | A bookmark manager app, using sqlite for data persistenace |                All platforms                |
-|    Disk Usage    |  `github.com/claceio/apps/system/disk_usage`  |         Disk space usage monitor, with drill down          | Linux, OSX, Windows with WSL. Uses `df` cli |
-|   Memory Usage   | `github.com/claceio/apps/system/memory_usage` |      Memory usage monitor, grouped by parent process       | Linux, OSX, Windows with WSL. Uses `ps` cli |
+|     App Name     |                  Install Url                  |                        Description                         |             System Requirements             |                   Demo                   |
+| :--------------: | :-------------------------------------------: | :--------------------------------------------------------: | :-----------------------------------------: | :--------------------------------------: |
+| Bookmark Manager |   `github.com/claceio/apps/utils/bookmarks`   | A bookmark manager app, using sqlite for data persistenace |                All platforms                |                                          |
+|    Disk Usage    |  `github.com/claceio/apps/system/disk_usage`  |         Disk space usage monitor, with drill down          | Linux, OSX, Windows with WSL. Uses `df` cli |  https://utils.demo.clace.io/disk_usage  |
+|   Memory Usage   | `github.com/claceio/apps/system/memory_usage` |      Memory usage monitor, grouped by parent process       | Linux, OSX, Windows with WSL. Uses `ps` cli | https://utils.demo.clace.io/memory_usage |
