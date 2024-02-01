@@ -13,10 +13,10 @@ source $HOME/clhome/bin/clace.env
 clace server start &
 ```
 
-After that, any app can be installed by running:
+After Clace service is started, any app can be installed by running:
 
 ```
- clace app create --approve /utils/bookmarks github.com/claceio/apps/utils/bookmarks/
+clace app create --approve /utils/bookmarks https://github.com/claceio/apps/utils/bookmarks/
 ```
 
 The app should be available at https://localhost:25223/utils/bookmarks. Use `admin` as the username and the password displayed when the Clace server was installed.
