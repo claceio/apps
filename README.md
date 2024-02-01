@@ -4,7 +4,7 @@ Clace is a web server which makes self-hosting Hypermedia driven web application
 
 https://github.com/claceio/clace is the main Clace repository. This `apps` repository contains Hypermedia driven web apps which can be installed on a Clace server.
 
-To install Clace, run:
+To [install Clace](https://clace.io/docs/installation/), run:
 
 ```
 curl -L https://clace.io/install.sh | sh
@@ -21,7 +21,7 @@ clace app create --approve /system/disk_usage https://github.com/claceio/apps/sy
 clace app create --approve /system/memory_usage https://github.com/claceio/apps/system/memory_usage
 ```
 
-The app should be available at https://localhost:25223/utils/bookmarks. Use `admin` as the username and the password displayed when the Clace server was installed.
+The apps should be available at the requested url, like https://localhost:25223/utils/bookmarks. Use `admin` as the username and the password displayed when the Clace server was installed.
 
 To update existing apps, run
 
