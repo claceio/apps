@@ -1,4 +1,5 @@
 load("store.in", "store")
+load("http.in", "http")
 
 LIMIT = 20
 
@@ -76,6 +77,24 @@ def delete_contact(req):
     return ace.response({}, "empty", redirect=req.AppPath)
 
 
+def bulk_load(req):
+    ret = http.get(
+        "https://raw.githubusercontent.com/1cg/size_comparison/main/data.json")
+    if not ret:
+        print(ret.error)
+        return ace.response({"error": ret.error}, "error")
+
+    data = ret.value.json()
+    count = 0
+    for row in data:
+        count += 1
+        contact = doc.contact(first_name=row["first_name"], last_name=row["last_name"],
+                              email=row["email"], gender=row["gender"], ip_address=row["ip_address"])
+        ret = store.insert(table.contact, contact)
+
+    return ace.response({"status": "ok", count: count})
+
+
 app = ace.app("Contacts",
               custom_layout=True,
               pages=[
@@ -88,12 +107,14 @@ app = ace.app("Contacts",
                                ace.fragment("{id}", "contact_body", method="DELETE",
                                             handler=delete_contact),
                            ]),
+                  ace.page("/bulk_load", type="json", handler=bulk_load)
               ],
               permissions=[
                   ace.permission("store.in", "select"),
                   ace.permission("store.in", "insert"),
                   ace.permission("store.in", "delete_by_id"),
+                  ace.permission("http.in", "get"),
               ],
               style=ace.style("daisyui", themes=[
-                              "lemonade", "dim"]),
+                  "lemonade", "dim"]),
               )
