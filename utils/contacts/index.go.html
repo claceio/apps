@@ -1,0 +1,124 @@
+{{ template "header" . }}
+
+
+<div>
+  <div id="create-contact" class="p-4">
+    <div class="grid grid-cols-6">
+      <label class="my-4 col-start-1 col-span-2 text-l font-light text-sky-400">
+        <b>Create Contact</b>
+      </label>
+    </div>
+
+    <form
+      action="{{ .AppPath }}/create"
+      method="post"
+      class="grid grid-cols-12 gap-2 ">
+      <input
+        class="pt-1  col-span-2 input input-primary "
+        placeholder="First Name"
+        name="first_name"
+        size="40" />
+      <input
+        class="pt-1 col-span-2 input input-primary "
+        placeholder="Last Name"
+        name="last_name"
+        size="40" />
+      <input
+        class="pt-1  col-span-2 input input-primary "
+        placeholder="Email"
+        name="email"
+        size="40" />
+      <input
+        class="pt-1 col-span-2 input input-primary "
+        placeholder="Gender"
+        name="gender"
+        size="40" />
+      <input
+        class="pt-1  col-span-2 input input-primary "
+        placeholder="IP Address"
+        name="ip_address"
+        size="40" />
+
+      <input
+        type="submit"
+        value="Create"
+        class="btn btn-primary rounded-md  col-span-2 font-bold" />
+    </form>
+  </div>
+
+  <div class="py-6 pb-2 pl-4 grid grid-cols-6">
+    <label class="col-start-1 col-span-2 text-l font-light text-sky-400">
+      <b>Recent Contacts</b>
+    </label>
+    <span class="htmx-indicator col-start-4 col-span-1">
+      <img src="/img/bars.svg" /> Searching...
+    </span>
+
+    <input
+      class="col-start-5 col-span-2 input"
+      type="search"
+      name="search"
+      placeholder="Search Users..."
+      hx-post="{{ .AppPath }}/search"
+      hx-trigger="input changed delay:500ms, search"
+      hx-target="#contact_body"
+      hx-swap="innerHTML"
+      hx-indicator=".htmx-indicator" />
+  </div>
+
+  <div>
+    <table class="table table-zebra text-md font-mono">
+      <thead>
+        <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Email</th>
+          <th>Gender</th>
+          <th>IP Address</th>
+        </tr>
+      </thead>
+
+      <tbody id="contact_body">
+        {{ block "contact_body" . }}
+          {{ $count := len .Data.Contacts }}
+          {{ range $i, $c := .Data.Contacts }}
+            <tr
+              {{ if eq $count (add $i 1) }}
+                hx-get="{{ $.AppPath }}?id={{ $c._id }}&search={{ $.Data.Search }}"
+                hx-trigger="revealed" hx-swap="afterend"
+                hx-indicator=".htmx-indicator"
+              {{ end }}>
+              <td>
+                {{ $c.first_name }}
+              </td>
+              <td>
+                {{ $c.last_name }}
+              </td>
+              <td>
+                {{ $c.email }}
+              </td>
+              <td>
+                {{ $c.gender }}
+              </td>
+              <td>
+                {{ $c.ip_address }}
+              </td>
+              <td>
+                <a
+                  class="font-bold text-red-500"
+                  hx-delete="{{ $.AppPath }}/{{ $c._id }}"
+                  href="{{ $.AppPath }}/{{ $c._id }}"
+                  hx-target="#contact_body"
+                  >DELETE</a
+                >
+              </td>
+            </tr>
+          {{ end }}
+        {{ end }}
+        <!-- End of "contact_body" block -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{{ template "footer" . }}
