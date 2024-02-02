@@ -50,9 +50,12 @@
     <label class="col-start-1 col-span-2 text-l font-light text-sky-400">
       <b>Recent Contacts</b>
     </label>
-    <span class="htmx-indicator col-start-4 col-span-1">
-      <img src="/img/bars.svg" /> Searching...
-    </span>
+
+    <img
+      id="spinner"
+      alt="Loading..."
+      class="htmx-indicator col-start-4 col-span-1"
+      src="{{ static "images/spinner.svg" }}" />
 
     <input
       class="col-start-5 col-span-2 input"
@@ -63,7 +66,7 @@
       hx-trigger="input changed delay:500ms, search"
       hx-target="#contact_body"
       hx-swap="innerHTML"
-      hx-indicator=".htmx-indicator" />
+      hx-indicator="#spinner" />
   </div>
 
   <div>

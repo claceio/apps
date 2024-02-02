@@ -73,7 +73,7 @@ def delete_contact(req):
         print(ret.error)
         return ace.response({"error": ret.error}, "error")
 
-    return ace.redirect(req.AppPath)
+    return ace.response({}, "empty", redirect=req.AppPath)
 
 
 app = ace.app("Contacts",
