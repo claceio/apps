@@ -1,7 +1,7 @@
 load("store.in", "store")
 load("http.in", "http")
 
-LIMIT = 20
+LIMIT = 1000
 
 
 def create_contact(req):
@@ -57,10 +57,7 @@ def get_contacts(search, id):
         print(ret.error)
         return ace.response({"error": ret.error}, "error", code=404)
 
-    contacts = []
-    for row in ret.value:
-        contacts.append(row)
-
+    contacts = [row for row in ret.value]
     return {"Contacts": contacts, "Search": search}
 
 

@@ -24,7 +24,9 @@
             </td>
             <td>
               {{ range $u, $url := $t.urls }}
-                <a class="link " href="{{ $url }}">{{ $url }}</a>
+                <a class="link " href="{{ $url }}" target="_blank"
+                  >{{ $url }}</a
+                >
               {{ end }}
             </td>
           </tr>

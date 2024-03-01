@@ -1,70 +1,59 @@
 load("store.in", "store")
 
 
-def create_bookmark(req):
-    url = ""
-    if "url" in req.Form:
-        url = req.Form["url"][0]
-    if not url:
-        return ace.response("no url specified", "error", code=404)
-
+def get_cleaned_tags(form):
     tags = []
-    if "tags" in req.Form:
-        tags = req.Form["tags"]
+    if "tags" in form:
+        tags = form["tags"]
 
     cleaned_tags = []
     for tag in tags:
         tag = tag.strip().lower()
-        cleaned_tags.append(tag)
-    tags = cleaned_tags
+        if tag not in cleaned_tags:
+            cleaned_tags.append(tag)
+    return cleaned_tags
 
+
+def create_bookmark(req):
+    if not req.Form["url"] or not req.Form["url"][0]:
+        return ace.response({"error": "no url specified"}, "error")
+    url = req.Form["url"][0]
+    tags = get_cleaned_tags(req.Form)
+
+    store.begin()
     bookmark = doc.bookmark(url, tags)
-    ret = store.insert(table.bookmark, bookmark)
-    if not ret:
-        print(ret.error)
-        return ace.response(ret, "error", code=404)
+    store.insert(table.bookmark, bookmark)
 
     for tag in tags:
         tag_doc = None
         ret = store.select_one(table.tag, {"tag": tag})
         if ret:
-            tag_doc = ret.value
-
-        if tag_doc:
             # Update existing tag
-            print("updating tag", tag_doc.urls, "with url", url)
+            tag_doc = ret.value
             tag_doc.urls.append(url)
-            ret = store.update(table.tag, tag_doc)
-            if not ret:
-                print("error updating", ret.error)
-                return ace.response({"error": ret.error}, "error", code=404)
+            store.update(table.tag, tag_doc)
         else:
             # Create new tag
             tag_doc = doc.tag(tag, [url])
-            ret = store.insert(table.tag, tag_doc)
-            if not ret:
-                print("error inserting", ret.error)
-                return ace.response({"error": ret.error}, "error", code=404)
+            store.insert(table.tag, tag_doc)
 
+    store.commit()
     return ace.redirect(req.AppPath)
 
 
 def get_bookmarks(req):
-    ret = store.select(table.bookmark, {}, limit=100,
-                       sort=["_created_at:desc"])
-    if not ret:
-        print(ret.error)
-        return ace.response({"error": ret.error}, "error", code=404)
+    search_cond = req.Query.get("search")
+    search = {}
+    if search_cond and search_cond[0]:
+        search = {"url": {"$like": "*" + search_cond[0] + "*"}}
 
+    ret = store.select(table.bookmark, search, limit=100,
+                       sort=["_updated_at:desc"])
     bookmarks = []
     for row in ret.value:
         bookmarks.append(row)
 
     ret = store.select(table.tag, {}, sort=["_updated_at:desc"])
-    if not ret:
-        print(ret.error)
-        return ace.response({"error": ret.error}, "error", code=404)
-
     tags = []
     for row in ret.value:
         tags.append(row.tag)
@@ -72,12 +61,103 @@ def get_bookmarks(req):
     return {"Bookmarks": bookmarks, "Tags": tags}
 
 
-def get_tags(req):
-    ret = store.select(table.tag, {}, limit=100,
-                       sort=["_updated_at:desc"])
-    if not ret:
-        return ace.response({"error": ret.error}, "error", code=404)
+def get_bookmark(req):
+    url = req.Query.get("url")
+    if not url:
+        return ace.response({"error": "no bookmark url specified"})
+    search = {"url": url[0]}
+    bookmark = store.select_one(table.bookmark, search).value
+    return bookmark
 
+
+def edit_bookmark(req):
+    url = req.Query.get("url")
+    if not url:
+        return ace.response({"error": "no bookmark url specified"})
+    url = url[0]
+
+    book = store.select_one(table.bookmark, {"url": url}).value
+    tag_iter = store.select(table.tag, {}, sort=["_updated_at:desc"]).value
+
+    tags = []
+    for row in tag_iter:
+        tags.append(
+            {"name": row.tag, "value": "selected" if row.tag in book.tags else ""})
+
+    val = {"url": book.url, "tags": tags}
+    return val
+
+
+def post_edit_bookmark(req):
+    url = req.Query.get("url")[0]
+    tags = get_cleaned_tags(req.Form)
+
+    store.begin()
+    bookmark = store.select_one(table.bookmark, {"url": url}).value
+
+    added = []
+    for tag in tags:
+        if tag not in bookmark.tags:
+            added.append(tag)
+
+    removed = []
+    for tag in bookmark.tags:
+        if tag not in tags:
+            removed.append(tag)
+
+    # Remove url from removed tags
+    for tag in removed:
+        tag_doc = store.select_one(table.tag, {"tag": tag}).value
+        tag_doc.urls.remove(url)
+        if len(tag_doc.urls) == 0:
+            store.delete_by_id(table.tag, tag_doc._id)
+        else:
+            store.update(table.tag, tag_doc)
+
+    # Add url to added tags
+    for tag in added:
+        ret = store.select_one(table.tag, {"tag": tag})
+        if ret:
+            tag_doc = ret.value
+            if url not in tag_doc.urls:
+                tag_doc.urls.append(url)
+                store.update(table.tag, tag_doc)
+        else:
+            tag_doc = doc.tag(tag, [url])
+            store.insert(table.tag, tag_doc)
+
+    bookmark.tags = tags
+    store.update(table.bookmark, bookmark)
+    store.commit()
+    return bookmark
+
+
+def delete_bookmark(req):
+    if not req.Form["url"] or not req.Form["url"][0]:
+        return ace.response({"error": "no url specified"}, "error")
+    url = req.Form["url"][0]
+
+    store.begin()
+    bookmark = store.select_one(table.bookmark, {"url": url}).value
+    for tag in bookmark.tags:
+        tag_doc = store.select_one(table.tag, {"tag": tag}).value
+        tag_doc.urls.remove(url)
+        if len(tag_doc.urls) == 0:
+            store.delete_by_id(table.tag, tag_doc._id)
+        else:
+            store.update(table.tag, tag_doc)
+
+    store.delete_by_id(table.bookmark, bookmark._id)
+    store.commit()
+
+
+def get_tags(req):
+    tag = req.Query.get("tag")
+    search = {}
+    if tag and tag[0]:
+        search = {"tag": tag[0]}
+
+    ret = store.select(table.tag, search, limit=100, sort=["_updated_at:desc"])
     tags = []
     for row in ret.value:
         tags.append(row)
@@ -85,13 +165,28 @@ def get_tags(req):
     return {"Tags": tags}
 
 
+def error_handler(req, ret):
+    if req.IsPartial:
+        return ace.response(ret, "error", retarget="#error_div", reswap="innerHTML")
+    else:
+        return ace.response(ret, "error.go.html")
+
+
 app = ace.app("Bookmark Manager",
               custom_layout=True,
               pages=[
-                  ace.page("/", "index.go.html", "", handler=get_bookmarks,
+                  ace.page("/", "index.go.html", handler=get_bookmarks,
                            fragments=[
+                               ace.fragment("bookmark", partial="row", method="GET",
+                                            handler=get_bookmark),
                                ace.fragment("create", method="POST",
                                             handler=create_bookmark),
+                               ace.fragment("/", partial="empty", method="DELETE",
+                                            handler=delete_bookmark),
+                               ace.fragment("edit", partial="edit_bookmark", method="GET",
+                                            handler=edit_bookmark),
+                               ace.fragment("edit", partial="row", method="POST",
+                                            handler=post_edit_bookmark),
                            ]),
                   ace.page("/tags", "tag.go.html", handler=get_tags),
               ],
@@ -100,9 +195,12 @@ app = ace.app("Bookmark Manager",
                   ace.permission("store.in", "insert"),
                   ace.permission("store.in", "update"),
                   ace.permission("store.in", "select_one"),
+                  ace.permission("store.in", "begin"),
+                  ace.permission("store.in", "commit"),
+                  ace.permission("store.in", "delete_by_id"),
               ],
               style=ace.style("daisyui", themes=[
-                              "lemonade", "dim"]),
+                  "lemonade", "dim"]),
               libraries=[
                   "https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"],
               )

@@ -2,9 +2,7 @@
 
 
 <div>
-  <div id="create-bookmark" class="p-4">
-    <!-- Your form and other content here -->
-
+  <div id="manage-bookmark" class="p-4">
     <div class="grid grid-cols-6">
       <label class="my-4 col-start-1 col-span-2 text-l font-light text-sky-400">
         <b>Create Bookmark</b>
@@ -48,7 +46,10 @@
   </div>
 
   <div>
-    <table class="table table-zebra text-md font-mono">
+    <table
+      class="table text-md font-mono"
+      hx-target="closest tr"
+      hx-swap="outerHTML">
       <thead>
         <tr>
           <th>Link</th>
@@ -56,17 +57,9 @@
         </tr>
       </thead>
       <tbody>
-        {{ range $i, $b := .Data.Bookmarks }}
-          <tr>
-            <td>
-              <a class="link" href="{{ $b.url }}">{{ $b.url }}</a>
-            </td>
-            <td>
-              {{ range $t, $tag := $b.tags }}
-                <div class="badge badge-secondary">{{ $tag }}</div>
-              {{ end }}
-            </td>
-          </tr>
+        {{ range .Data.Bookmarks }}
+          {{ $row := dict "Data" . "AppPath" $.AppPath }}
+          {{ template "row" $row }}
         {{ end }}
       </tbody>
     </table>
@@ -74,3 +67,72 @@
 </div>
 
 {{ template "footer" . }}
+
+{{ define "edit_bookmark" }}
+  <tr>
+    <td>{{ .Data.url }}</td>
+    <td>
+      <select
+        name="tags"
+        class="tags-select-edit col-start-5 col-span-6 select select-multiple"
+        style="border-color: #0284c7; border-width: 1px;"
+        multiple
+        placeholder="Update tags...">
+        {{ $selected := "" }}
+        {{ range $i, $tag := .Data.tags }}
+          <option
+            value="{{- $tag.name -}}"
+            {{ if $tag.value }}{{ $tag.value }}{{ end }}>
+            {{ $tag.name }}
+          </option>
+        {{ end }}
+      </select>
+    </td>
+    <td>
+      <button
+        class="btn btn-sm btn-primary"
+        hx-post="{{ .AppPath }}/edit?url={{ .Data.url }}"
+        hx-include="closest tr">
+        Save
+      </button>
+
+      <button
+        class="btn btn-sm btn-secondary"
+        hx-get="{{ .AppPath }}/bookmark?url={{ .Data.url }}">
+        Cancel
+      </button>
+    </td>
+  </tr>
+{{ end }}
+
+{{ define "row" }}
+  <tr>
+    <td>
+      <a class="link" href="{{ .Data.url }}" target="_blank">{{ .Data.url }}</a>
+    </td>
+    <td>
+      {{ range .Data.tags }}
+        <a href="{{ $.AppPath }}/tags?tag={{ . }}"
+          ><div class="badge badge-secondary">{{ . }}</div></a
+        >
+      {{ end }}
+    </td>
+    <td>
+      <button title="edit">
+        <img
+          src="{{ static "icons/edit.svg" }}"
+          alt="edit"
+          hx-get="{{ .AppPath }}/edit?url={{ .Data.url }}" />
+      </button>
+    </td>
+    <td>
+      <button title="delete">
+        <img
+          src="{{ static "icons/delete.svg" }}"
+          alt="delete"
+          hx-delete="{{ .AppPath }}/?url={{ .Data.url }}"
+          hx-swap="outerHTML swap:1s" />
+      </button>
+    </td>
+  </tr>
+{{ end }}
