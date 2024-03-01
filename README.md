@@ -16,17 +16,17 @@ clace server start &
 After Clace service is started, an app can be installed by running:
 
 ```
-clace app create --approve /utils/bookmarks https://github.com/claceio/apps/utils/bookmarks/
+clace app create --approve /bookmarks https://github.com/claceio/apps/utils/bookmarks/
 clace app create --approve /system/disk_usage https://github.com/claceio/apps/system/disk_usage
 clace app create --approve /system/memory_usage https://github.com/claceio/apps/system/memory_usage
 ```
 
-The apps should be available at the requested url, like https://localhost:25223/utils/bookmarks. Use `admin` as the username and the password displayed when the Clace server was installed.
+The apps will be available at the requested url, like https://localhost:25223/bookmarks. Use `admin` as the username and the password displayed when the Clace server was installed. To disable password auth for the ap, add the `--auth-type none` option to the `app create` command. To change existing app auth-type, run `clace app update auth-type /bookmarks none`.
 
-To update existing apps, run
+To reload existing apps with any code changes from GitHub, run
 
 ```
-clace app reload --promote /utils/bookmarks # reload one app from latest code in GitHub
+clace app reload --promote /bookmarks # reload one app from latest code in GitHub
 clace app reload --promote all # reload all apps from latest code in GitHub
 ```
 
@@ -34,8 +34,8 @@ See [lifecycle](https://clace.io/docs/applications/lifecycle/) for details on ap
 
 # Application Listing
 
-|     App Name     |                  Install Url                  |                        Description                         |             System Requirements             | Demo                                     |
-| :--------------: | :-------------------------------------------: | :--------------------------------------------------------: | :-----------------------------------------: | :--------------------------------------- |
-| Bookmark Manager |   `github.com/claceio/apps/utils/bookmarks`   | A bookmark manager app, using sqlite for data persistenace |                All platforms                |                                          |
-|    Disk Usage    |  `github.com/claceio/apps/system/disk_usage`  |         Disk space usage monitor, with drill down          | Linux, OSX, Windows with WSL. Uses `df` cli | https://utils.demo.clace.io/disk_usage   |
-|   Memory Usage   | `github.com/claceio/apps/system/memory_usage` |      Memory usage monitor, grouped by parent process       | Linux, OSX, Windows with WSL. Uses `ps` cli | https://utils.demo.clace.io/memory_usage |
+|     App Name     |                  Install Url                  |                        Description                         |             System Requirements             | Demo                                  |
+| :--------------: | :-------------------------------------------: | :--------------------------------------------------------: | :-----------------------------------------: | :------------------------------------ |
+| Bookmark Manager |   `github.com/claceio/apps/utils/bookmarks`   | A bookmark manager app, using sqlite for data persistenace |                All platforms                | https://utils.demo.clace.io/bookmarks |
+|    Disk Usage    |  `github.com/claceio/apps/system/disk_usage`  |         Disk space usage monitor, with drill down          |                All platforms                | https://du.demo.clace.io/             |
+|   Memory Usage   | `github.com/claceio/apps/system/memory_usage` |      Memory usage monitor, grouped by parent process       | Linux, OSX, Windows with WSL. Uses `ps` cli | https://memory.demo.clace.io/         |
