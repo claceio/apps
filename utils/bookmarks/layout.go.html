@@ -23,7 +23,7 @@
     </head>
 
     <!-- Full screen container -->
-    <body hx-ext="debug">
+    <body>
       <div class="min-h-screen grid grid-flow-col md:grid-cols-12">
         <!-- Left entry area: 1/6 of the screen on large screens -->
         <div class="md:col-span-2"></div>
@@ -111,7 +111,6 @@
         }
 
         function setupTagEdits(event) {
-          console.log("Setting up tag edits", event.target);
           tsElement = event.target.querySelector(".tags-select-edit")
           setupTomSelect(tsElement);
         }

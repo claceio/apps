@@ -47,13 +47,15 @@
 
   <div>
     <table
-      class="table text-md font-mono"
+      class="table text-md font-mono table-fixed w-full"
       hx-target="closest tr"
       hx-swap="outerHTML">
       <thead>
         <tr>
-          <th>Link</th>
-          <th>Tags</th>
+          <th class="w-2/3 max-w-xs break-words">Link</th>
+          <th class="w-2/3 max-w-xs">Tags</th>
+          <th class="w-1/6">&nbsp;&nbsp;</th>
+          <th class="w-1/6">&nbsp;&nbsp;</th>
         </tr>
       </thead>
       <tbody>
@@ -107,7 +109,7 @@
 
 {{ define "row" }}
   <tr>
-    <td>
+    <td class="max-w-xs break-words">
       <a class="link" href="{{ .Data.url }}" target="_blank">{{ .Data.url }}</a>
     </td>
     <td>
