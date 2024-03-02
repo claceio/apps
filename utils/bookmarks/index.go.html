@@ -122,6 +122,7 @@
     <td>
       <button title="edit">
         <img
+          class="max-w-none"
           src="{{ static "icons/edit.svg" }}"
           alt="edit"
           hx-get="{{ .AppPath }}/edit?url={{ .Data.url }}" />
@@ -130,6 +131,7 @@
     <td>
       <button title="delete">
         <img
+          class="max-w-none"
           src="{{ static "icons/delete.svg" }}"
           alt="delete"
           hx-delete="{{ .AppPath }}/?url={{ .Data.url }}"
