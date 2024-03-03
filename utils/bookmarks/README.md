@@ -3,7 +3,7 @@
 This is a Clace app to manage bookmarks. To install, run
 
 ```shell
-clace app create --approve github.com/claceio/apps/utils/bookmarks /book
+clace app create --approve /book github.com/claceio/apps/utils/bookmarks
 ```
 
 The app should be installed to `https://localhost:25223/book`. To disable authentication for the app, run
