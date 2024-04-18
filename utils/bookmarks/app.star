@@ -174,7 +174,7 @@ def error_handler(req, ret):
 
 app = ace.app("Bookmark Manager",
               custom_layout=True,
-              pages=[
+              routes=[
                   ace.page("/", "index.go.html", handler=get_bookmarks,
                            fragments=[
                                ace.fragment("bookmark", partial="row", method="GET",
