@@ -95,7 +95,7 @@ def bulk_load(req):
 app = ace.app("Contacts",
               custom_layout=True,
               routes=[
-                  ace.page("/", "index.go.html", "contact_body", handler=get_handler,
+                  ace.html("/", "index.go.html", "contact_body", handler=get_handler,
                            fragments=[
                                ace.fragment("create",  method="POST",
                                             handler=create_contact),
@@ -104,7 +104,7 @@ app = ace.app("Contacts",
                                ace.fragment("{id}", "contact_body", method="DELETE",
                                             handler=delete_contact),
                            ]),
-                  ace.page("/bulk_load", type="json", handler=bulk_load)
+                  ace.api("/bulk_load", handler=bulk_load)
               ],
               permissions=[
                   ace.permission("store.in", "select"),

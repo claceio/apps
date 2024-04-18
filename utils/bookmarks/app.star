@@ -175,7 +175,7 @@ def error_handler(req, ret):
 app = ace.app("Bookmark Manager",
               custom_layout=True,
               routes=[
-                  ace.page("/", "index.go.html", handler=get_bookmarks,
+                  ace.html("/", "index.go.html", handler=get_bookmarks,
                            fragments=[
                                ace.fragment("bookmark", partial="row", method="GET",
                                             handler=get_bookmark),
@@ -188,7 +188,7 @@ app = ace.app("Bookmark Manager",
                                ace.fragment("edit", partial="row", method="POST",
                                             handler=post_edit_bookmark),
                            ]),
-                  ace.page("/tags", "tag.go.html", handler=get_tags),
+                  ace.html("/tags", "tag.go.html", handler=get_tags),
               ],
               permissions=[
                   ace.permission("store.in", "select"),
