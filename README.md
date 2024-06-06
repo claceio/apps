@@ -16,12 +16,12 @@ clace server start &
 After Clace service is started, an app can be installed by running:
 
 ```
-clace app create --approve /bookmarks https://github.com/claceio/apps/utils/bookmarks/
-clace app create --approve /system/disk_usage https://github.com/claceio/apps/system/disk_usage
-clace app create --approve /system/memory_usage https://github.com/claceio/apps/system/memory_usage
+clace app create --approve https://github.com/claceio/apps/utils/bookmarks/ /bookmarks
+clace app create --approve https://github.com/claceio/apps/system/disk_usage /system/disk_usage
+clace app create --approve https://github.com/claceio/apps/system/memory_usage /system/memory_usage
 ```
 
-The apps will be available at the requested url, like https://localhost:25223/bookmarks. Use `admin` as the username and the password displayed when the Clace server was installed. To disable password auth for the ap, add the `--auth-type none` option to the `app create` command. To change existing app auth-type, run `clace app update auth-type /bookmarks none`.
+The apps will be available at the requested url, like https://localhost:25223/bookmarks. Use `admin` as the username and the password displayed when the Clace server was installed. To disable password auth for the ap, add the `--auth none` option to the `app create` command. To change existing app auth, run `clace app update auth none /bookmarks`.
 
 To reload existing apps with any code changes from GitHub, run
 

@@ -3,16 +3,16 @@
 This is a Clace app to manage bookmarks. To install, run
 
 ```shell
-clace app create --approve /book github.com/claceio/apps/utils/bookmarks
+clace app create --approve github.com/claceio/apps/utils/bookmarks /book
 ```
 
 The app should be installed to `https://localhost:25223/book`. To disable authentication for the app, run
 
 ```shell
-clace app update auth-type /book none
+clace app update auth none /book
 ```
 
-or add `--auth-type none` in the `app create` command.
+or add `--auth none` in the `app create` command.
 
 The data is persisted to a sqlite database, at `$CL_HOME/clace_app.db` by default. The database tables are automatically created on first access.
 
