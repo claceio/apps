@@ -39,3 +39,4 @@ See [lifecycle](https://clace.io/docs/applications/lifecycle/) for details on ap
 | Bookmark Manager |   `github.com/claceio/apps/utils/bookmarks`   | A bookmark manager app, using sqlite for data persistenace |                All platforms                | https://utils.demo.clace.io/bookmarks |
 |    Disk Usage    |  `github.com/claceio/apps/system/disk_usage`  |         Disk space usage monitor, with drill down          |                All platforms                | https://du.demo.clace.io/             |
 |   Memory Usage   | `github.com/claceio/apps/system/memory_usage` |      Memory usage monitor, grouped by parent process       | Linux, OSX, Windows with WSL. Uses `ps` cli | https://memory.demo.clace.io/         |
+
