@@ -1,28 +1,27 @@
 {{ block "custom_report" . }}
-{{ range . }}
-{{ range .meanings }}
-<h2 class="text-2xl text-primary" > {{ .partOfSpeech }} </h2>
-<ul class="list-disc pl-8">
-  {{ range .definitions }}
-  <li> {{ .definition }}
-    {{ if .example }}
-    <span class="pl-1 text-secondary"> {{ .example }} </span>
+  {{ range . }}
+    {{ range .meanings }}
+      <h2 class="text-2xl text-primary">{{ .partOfSpeech }}</h2>
+      <ul class="list-disc pl-8">
+        {{ range .definitions }}
+          <li>
+            {{ .definition }}
+            {{ if .example }}
+              <span class="pl-1 text-secondary"> {{ .example }} </span>
+            {{ end }}
+          </li>
+        {{ end }}
+      </ul>
+
+      {{ if .synonyms }}
+        <details>
+          <summary class="text-xl">Synonyms</summary>
+          {{ range .synonyms }}
+            {{ . }},
+          {{ end }}
+        </details>
+      {{ end }}
+
     {{ end }}
-  </li>
   {{ end }}
-</ul>
-
-{{ if .synonyms }}
-<details>
-  <summary class="text-xl">Synonyms</summary>
-  {{ range .synonyms }}
-    {{ . }},
-  {{ end }}
-</details>
-{{ end }}
-
-{{ end }}
-
-{{ end }}
-
 {{ end }}
