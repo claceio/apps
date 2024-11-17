@@ -1,0 +1,110 @@
+{{ template "header" . }}
+
+
+<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+  {{ range .Data }}
+    <div class="card card-bordered border-gray-500 w-full shadow-xl">
+      <div class="card-body">
+        <div class="flex justify-between items-center">
+          <!-- Text Label -->
+          <span class="text-left text-xl font-bold text-primary"
+            >{{ .name }}</span
+          >
+
+          <!-- SVG Icons Wrapper -->
+          <div class="flex space-x-2">
+            <!-- Optional SVG 1 -->
+            {{ if .is_dev }}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="icon icon-tabler icons-tabler-outline icon-tabler-code">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M7 8l-4 4l4 4" />
+                <path d="M17 8l4 4l-4 4" />
+                <path d="M14 4l-4 16" />
+                <title>Dev Mode</title>
+              </svg>
+            {{ end }}
+
+
+            <!-- Optional SVG 2 -->
+            {{ if eq .auth "none" }}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="icon icon-tabler icons-tabler-outline icon-tabler-lock-open">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path
+                  d="M5 11m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+                <path d="M12 16m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                <path d="M8 11v-5a4 4 0 0 1 8 0" />
+                <title>No Auth</title>
+              </svg>
+            {{ end }}
+          </div>
+        </div>
+
+        <div class="pt-2 flex items-center justify-between w-full">
+          <div class="flex">
+            {{ if ne .spec "" }}
+              <div class="text-left break-anywhere">Spec: {{ .spec }}</div>
+            {{ end }}
+          </div>
+
+          <!-- Right-aligned button -->
+          <div class="card-actions flex justify-right">
+            <a href="{{ .url }}" target="_blank">
+              <button class="btn btn-primary btn-sm">Open</button>
+            </a>
+          </div>
+        </div>
+
+        <div class="tooltip" data-tip="App Path">
+          <div class="text-left text-secondary break-words whitespace-normal">
+            {{ .path }}
+          </div>
+        </div>
+
+        <div class="tooltip flex items-center pt-1" data-tip="Source Path">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="icon icon-tabler icons-tabler-outline icon-tabler-folder-code">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path
+              d="M11 19h-6a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2h4l3 3h7a2 2 0 0 1 2 2v4" />
+            <path d="M20 21l2 -2l-2 -2" />
+            <path d="M17 17l-2 2l2 2" />
+          </svg>
+          <code class="block text-left text-xs flex-1 pl-2">
+            {{ .source_url }}
+          </code>
+        </div>
+      </div>
+    </div>
+  {{ end }}
+</div>
+
+{{ template "footer" . }}
