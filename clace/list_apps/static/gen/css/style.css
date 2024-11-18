@@ -2282,10 +2282,6 @@ html {
   justify-self: center;
 }
 
-.whitespace-normal {
-  white-space: normal;
-}
-
 .break-words {
   overflow-wrap: break-word;
 }

@@ -7,9 +7,7 @@
       <div class="card-body">
         <div class="flex justify-between items-center">
           <!-- Text Label -->
-          <div
-            class="tooltip break-words whitespace-normal"
-            data-tip="{{ .name }}">
+          <div class="tooltip break-words" data-tip="{{ .name }}">
             <span class="text-left text-xl font-bold text-primary"
               >{{ substr 0 30 .name }}</span
             >
@@ -63,10 +61,18 @@
           </div>
         </div>
 
-        <div class="pt-2 flex items-center justify-between w-full">
-          <div class="flex">
+        <div class="flex items-center justify-between w-full">
+          <div class="text-xs">
             {{ if ne .spec "" }}
-              <div class="text-left break-anywhere">Spec: {{ .spec }}</div>
+              <p class="text-left break-anywhere">Spec: {{ .spec }}</p>
+            {{ end }}
+            {{ if ne .version 0 }}
+              <p class="text-left">Version: {{ .version }}</p>
+            {{ end }}
+            {{ if ne .git_sha "" }}
+              <div class="tooltip break-words" data-tip="{{ .git_message }}">
+                <p class="text-left">Commit: {{ .git_sha }}</p>
+              </div>
             {{ end }}
           </div>
 
@@ -79,14 +85,14 @@
         </div>
 
         <div class="tooltip" data-tip="App Path">
-          <div class="text-left text-cyan-500 break-words whitespace-normal">
+          <div class="text-left text-cyan-500 break-words">
             {{ .path }}
           </div>
         </div>
 
         {{ if ne .source_url "-" }}
           <div class="tooltip" data-tip="Source Code Path">
-            <code class="block text-left text-xs break-words whitespace-normal">
+            <code class="block text-left text-xs break-words">
               {{ .source_url }}
             </code>
           </div>
