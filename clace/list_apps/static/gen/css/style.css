@@ -2224,10 +2224,6 @@ html {
   width: 100%;
 }
 
-.flex-1 {
-  flex: 1 1 0%;
-}
-
 .grid-flow-col {
   grid-auto-flow: column;
 }
@@ -2315,10 +2311,6 @@ html {
   padding: 2rem;
 }
 
-.pl-2 {
-  padding-left: 0.5rem;
-}
-
 .pl-4 {
   padding-left: 1rem;
 }
@@ -2374,6 +2366,11 @@ html {
 
 .font-light {
   font-weight: 300;
+}
+
+.text-cyan-500 {
+  --tw-text-opacity: 1;
+  color: rgb(6 182 212 / var(--tw-text-opacity));
 }
 
 .text-error {

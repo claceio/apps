@@ -7,9 +7,13 @@
       <div class="card-body">
         <div class="flex justify-between items-center">
           <!-- Text Label -->
-          <span class="text-left text-xl font-bold text-primary"
-            >{{ .name }}</span
-          >
+          <div
+            class="tooltip break-words whitespace-normal"
+            data-tip="{{ .name }}">
+            <span class="text-left text-xl font-bold text-primary"
+              >{{ substr 0 30 .name }}</span
+            >
+          </div>
 
           <!-- SVG Icons Wrapper -->
           <div class="flex space-x-2">
@@ -75,33 +79,18 @@
         </div>
 
         <div class="tooltip" data-tip="App Path">
-          <div class="text-left text-secondary break-words whitespace-normal">
+          <div class="text-left text-cyan-500 break-words whitespace-normal">
             {{ .path }}
           </div>
         </div>
 
-        <div class="tooltip flex items-center pt-1" data-tip="Source Path">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="icon icon-tabler icons-tabler-outline icon-tabler-folder-code">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path
-              d="M11 19h-6a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2h4l3 3h7a2 2 0 0 1 2 2v4" />
-            <path d="M20 21l2 -2l-2 -2" />
-            <path d="M17 17l-2 2l2 2" />
-          </svg>
-          <code class="block text-left text-xs flex-1 pl-2">
-            {{ .source_url }}
-          </code>
-        </div>
+        {{ if ne .source_url "-" }}
+          <div class="tooltip" data-tip="Source Code Path">
+            <code class="block text-left text-xs break-words whitespace-normal">
+              {{ .source_url }}
+            </code>
+          </div>
+        {{ end }}
       </div>
     </div>
   {{ end }}
