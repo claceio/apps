@@ -1,13 +1,14 @@
 {{ template "header" . }}
 
 
-<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+<div class="grid grid-cols-1 gap-2 md:grid-cols-2">
   {{ range .Data }}
-    <div class="card card-bordered border-gray-500 w-full shadow-xl">
+    <div
+      class="card card-compact card-bordered border-gray-500 w-full shadow-xl ">
       <div class="card-body">
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between">
           <!-- Text Label -->
-          <div class="tooltip break-words" data-tip="{{ .name }}">
+          <div class="text-left tooltip break-words" data-tip="{{ .name }}">
             <span class="text-left text-xl font-bold text-primary"
               >{{ substr 0 30 .name }}</span
             >
@@ -77,7 +78,7 @@
           </div>
 
           <!-- Right-aligned button -->
-          <div class="card-actions flex justify-right">
+          <div class="justify-right">
             <a href="{{ .url }}" target="_blank">
               <button class="btn btn-primary btn-sm">Open</button>
             </a>
