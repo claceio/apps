@@ -14,21 +14,29 @@
   hx-indicator=".htmx-indicator"
   hx-push-url="true"
   hx-include="closest form">
-  <span>Show Internal</span>
-  <input
-    type="checkbox"
-    {{ if eq .Data.internal true }}checked{{ end }}
-    id="filter-internal"
-    class="checkbox m-2"
-    name="internal"
-    value="true" />
+  <div
+    class="tooltip tooltip-bottom flex items-center"
+    data-tip="Include staging and preview apps">
+    <label class="" for="filter-internal">Show Internal</label>
+    <input
+      type="checkbox"
+      {{ if eq .Data.internal true }}checked{{ end }}
+      id="filter-internal"
+      class="checkbox ml-1 mr-2"
+      name="internal"
+      value="true" />
+  </div>
 
-  <input
-    class="input input-bordered"
-    type="search"
-    name="q"
-    {{ if ne .Data.query "" }}value="{{ .Data.query }}"{{ end }}
-    placeholder="Search apps..." />
+  <div
+    class="tooltip tooltip-bottom"
+    data-tip="Search by app name/install path/source path">
+    <input
+      class="input input-bordered ml-1"
+      type="search"
+      name="q"
+      {{ if ne .Data.query "" }}value="{{ .Data.query }}"{{ end }}
+      placeholder="Search apps..." />
+  </div>
 </form>
 <div class="flex justify-center">
   <img
@@ -134,7 +142,7 @@
 
           {{ if ne .source_url "-" }}
             <div class="tooltip" data-tip="Source Code Path">
-              <code class="block text-left text-xs break-words">
+              <code class="block text-left text-sm break-words">
                 {{ .source_url }}
               </code>
             </div>
