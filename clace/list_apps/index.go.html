@@ -3,7 +3,11 @@
 
 <form
   class="flex items-center justify-center pb-2"
-  hx-get="{{ .AppPath }}"
+  hx-get="{{- if eq .AppPath "" -}}
+    /
+  {{- else -}}
+    {{ .AppPath }}
+  {{- end -}}"
   hx-trigger="input changed delay:500ms, change"
   hx-target="#apps"
   hx-params="*"
