@@ -1,106 +1,146 @@
 {{ template "header" . }}
 
 
-<div class="grid grid-cols-1 gap-2 md:grid-cols-2">
-  {{ range .Data }}
-    <div
-      class="card card-compact card-bordered border-gray-500 w-full shadow-xl ">
-      <div class="card-body">
-        <div class="flex justify-between">
-          <!-- Text Label -->
-          <div class="text-left tooltip break-words" data-tip="{{ .name }}">
-            <span class="text-left text-xl font-bold text-primary"
-              >{{ substr 0 30 .name }}</span
-            >
+<form
+  class="flex items-center justify-center pb-2"
+  hx-get="{{ .AppPath }}"
+  hx-trigger="input changed delay:500ms, change"
+  hx-target="#apps"
+  hx-params="*"
+  hx-indicator=".htmx-indicator"
+  hx-push-url="true"
+  hx-include="closest form">
+  <span>Show Internal</span>
+  <input
+    type="checkbox"
+    {{ if eq .Data.internal true }}checked{{ end }}
+    id="filter-internal"
+    class="checkbox m-2"
+    name="internal"
+    value="true" />
+
+  <input
+    class="input input-bordered"
+    type="search"
+    name="q"
+    {{ if ne .Data.query "" }}value="{{ .Data.query }}"{{ end }}
+    placeholder="Search apps..." />
+</form>
+<div class="flex justify-center">
+  <img
+    id="spinner"
+    alt="Loading..."
+    class="htmx-indicator my-1"
+    src="{{ static "spinner.svg" }}" />
+</div>
+
+<div id="apps" class="grid grid-cols-1 gap-1 md:grid-cols-2">
+  {{ block "search_results" . }}
+    {{ range .Data.apps }}
+      <div
+        class="card card-compact card-bordered border-gray-500 w-full shadow-xl">
+        <div class="card-body">
+          <div class="flex justify-between">
+            <!-- Text Label -->
+            <div class="text-left tooltip break-words" data-tip="{{ .name }}">
+              <span class="text-left text-xl font-bold text-primary"
+                >{{ substr 0 30 .name }}</span
+              >
+            </div>
+
+            <!-- SVG Icons Wrapper -->
+            <div class="flex space-x-2">
+              <!-- Optional SVG 1 -->
+              {{ if .is_dev }}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="icon icon-tabler icons-tabler-outline icon-tabler-code">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M7 8l-4 4l4 4" />
+                  <path d="M17 8l4 4l-4 4" />
+                  <path d="M14 4l-4 16" />
+                  <title>Dev Mode</title>
+                </svg>
+              {{ end }}
+
+
+              <!-- Optional SVG 2 -->
+              {{ if eq .auth "none" }}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="icon icon-tabler icons-tabler-outline icon-tabler-lock-open">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path
+                    d="M5 11m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+                  <path d="M12 16m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                  <path d="M8 11v-5a4 4 0 0 1 8 0" />
+                  <title>No Auth</title>
+                </svg>
+              {{ end }}
+            </div>
           </div>
 
-          <!-- SVG Icons Wrapper -->
-          <div class="flex space-x-2">
-            <!-- Optional SVG 1 -->
-            {{ if .is_dev }}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="icon icon-tabler icons-tabler-outline icon-tabler-code">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                <path d="M7 8l-4 4l4 4" />
-                <path d="M17 8l4 4l-4 4" />
-                <path d="M14 4l-4 16" />
-                <title>Dev Mode</title>
-              </svg>
-            {{ end }}
-
-
-            <!-- Optional SVG 2 -->
-            {{ if eq .auth "none" }}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="icon icon-tabler icons-tabler-outline icon-tabler-lock-open">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                <path
-                  d="M5 11m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
-                <path d="M12 16m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                <path d="M8 11v-5a4 4 0 0 1 8 0" />
-                <title>No Auth</title>
-              </svg>
-            {{ end }}
+          <div class="tooltip" data-tip="App Path">
+            <div class="text-left text-cyan-500 text-lg break-words">
+              {{ .path }}
+            </div>
           </div>
+
+          <div class="flex items-center justify-between w-full">
+            <div class="text-xs font-mono">
+              {{ if ne .spec "" }}
+                <p class="text-left break-anywhere">
+                  Spec&nbsp;&nbsp;&nbsp;&nbsp;:
+                  {{ .spec }}
+                </p>
+              {{ end }}
+              {{ if ne .version 0 }}
+                <p class="text-left">Version&nbsp;: {{ .version }}</p>
+              {{ end }}
+              {{ if ne .git_sha "" }}
+                <div class="tooltip break-words" data-tip="{{ .git_message }}">
+                  <p class="text-left">Commit&nbsp;&nbsp;: {{ .git_sha }}</p>
+                </div>
+              {{ end }}
+            </div>
+
+            <!-- Right-aligned button -->
+            <div class="justify-right">
+              <a href="{{ .url }}" target="_blank">
+                <button class="btn btn-primary btn-sm">Open</button>
+              </a>
+            </div>
+          </div>
+
+          {{ if ne .source_url "-" }}
+            <div class="tooltip" data-tip="Source Code Path">
+              <code class="block text-left text-xs break-words">
+                {{ .source_url }}
+              </code>
+            </div>
+          {{ end }}
         </div>
-
-        <div class="flex items-center justify-between w-full">
-          <div class="text-xs">
-            {{ if ne .spec "" }}
-              <p class="text-left break-anywhere">Spec: {{ .spec }}</p>
-            {{ end }}
-            {{ if ne .version 0 }}
-              <p class="text-left">Version: {{ .version }}</p>
-            {{ end }}
-            {{ if ne .git_sha "" }}
-              <div class="tooltip break-words" data-tip="{{ .git_message }}">
-                <p class="text-left">Commit: {{ .git_sha }}</p>
-              </div>
-            {{ end }}
-          </div>
-
-          <!-- Right-aligned button -->
-          <div class="justify-right">
-            <a href="{{ .url }}" target="_blank">
-              <button class="btn btn-primary btn-sm">Open</button>
-            </a>
-          </div>
-        </div>
-
-        <div class="tooltip" data-tip="App Path">
-          <div class="text-left text-cyan-500 break-words">
-            {{ .path }}
-          </div>
-        </div>
-
-        {{ if ne .source_url "-" }}
-          <div class="tooltip" data-tip="Source Code Path">
-            <code class="block text-left text-xs break-words">
-              {{ .source_url }}
-            </code>
-          </div>
-        {{ end }}
       </div>
-    </div>
+    {{ end }}
   {{ end }}
 </div>
+
+<!-- End of "search_results" block -->
 
 {{ template "footer" . }}

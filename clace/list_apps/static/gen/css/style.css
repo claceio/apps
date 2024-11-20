@@ -805,6 +805,12 @@ html {
   }
 }
 
+.avatar.placeholder > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 @media (hover:hover) {
   .checkbox-primary:hover {
     --tw-border-opacity: 1;
@@ -2173,6 +2179,15 @@ html {
   grid-column-start: 5;
 }
 
+.m-2 {
+  margin: 0.5rem;
+}
+
+.my-1 {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
 .mb-4 {
   margin-bottom: 1rem;
 }
@@ -2257,8 +2272,8 @@ html {
   justify-content: space-between;
 }
 
-.gap-2 {
-  gap: 0.5rem;
+.gap-1 {
+  gap: 0.25rem;
 }
 
 .gap-4 {
@@ -2302,6 +2317,10 @@ html {
 
 .p-8 {
   padding: 2rem;
+}
+
+.pb-2 {
+  padding-bottom: 0.5rem;
 }
 
 .pl-4 {
