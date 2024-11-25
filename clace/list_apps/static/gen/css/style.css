@@ -2332,10 +2332,6 @@ html {
   fill: currentColor;
 }
 
-.p-2 {
-  padding: 0.5rem;
-}
-
 .p-6 {
   padding: 1.5rem;
 }
@@ -2462,6 +2458,10 @@ html {
 
   .md\:grid-cols-12 {
     grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .md\:p-2 {
+    padding: 0.5rem;
   }
 }
 
