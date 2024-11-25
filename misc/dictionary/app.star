@@ -16,7 +16,7 @@ def run(dry_run, args):
    word = resp[0]
    
    if args.show == "basic":
-       defs = ["Word : " + word["word"], "Phonetic: " + word.get("phonetic")]
+       defs = ["Word : " + word["word"], "Phonetic: " + word.get("phonetic", "")]
        for m in word["meanings"]:
           for d in m["definitions"]:
               defs.append(m["partOfSpeech"] + " : " + d["definition"])
