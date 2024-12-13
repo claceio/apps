@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html data-theme="emerald" lang="en">
+  {{ template "head" . }}
+
+
+  <body>
+    <script>
+      document.body.addEventListener("htmx:sendError", function (event) {
+        InfoMessage.innerText = "API call failed: Server is not reachable";
+      });
+      document.body.addEventListener("htmx:responseError", function (event) {
+        InfoMessage.innerText =
+          "API call failed: " + event.detail.xhr.responseText;
+      });
+    </script>
+
+    {{ template "body_top" . }}
+
+
+    <form
+      class="w-full max-w-4xl mx-auto p-2"
+      hx-get="{{- if eq .AppPath "" -}}
+        /
+      {{- else -}}
+        {{ .AppPath }}
+      {{- end -}}"
+      hx-trigger="input changed delay:500ms, change"
+      hx-target="#audit_body"
+      hx-params="*"
+      hx-indicator=".htmx-indicator"
+      hx-push-url="true"
+      hx-include="closest form">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-1" for="appGlob"
+            >App Glob
+            <a
+              href="https://clace.io/docs/applications/overview/#glob-pattern"
+              target="_blank"
+              class="relative -top-1"
+              >?</a
+            ></label
+          >
+          <input
+            list="appList"
+            class="input input-bordered w-full"
+            id="appGlob"
+            name="appGlob"
+            search
+            placeholder="all" />
+
+          <datalist id="appList">
+            {{ range .Data.Apps }}
+              <option value="{{ .path }}"></option>
+            {{ end }}
+          </datalist>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1" for="eventType"
+            >Event Type</label
+          >
+          <select
+            type="select"
+            class="select select-bordered w-full"
+            id="eventType"
+            name="eventType">
+            <option value="" selected></option>
+            <option value="http">HTTP</option>
+            <option value="system">System</option>
+            <option value="action">Action</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1" for="operation"
+            >Operation</label
+          >
+          <input
+            type="text"
+            id="operation"
+            name="operation"
+            class="input input-bordered w-full" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1" for="target"
+            >Target</label
+          >
+          <input
+            type="text"
+            id="target"
+            name="target"
+            class="input input-bordered w-full" />
+        </div>
+      </div>
+
+      <details class="collapse collapse-arrow pt-2">
+        <summary class="collapse-title text-sm font-medium">
+          Advanced Filters
+        </summary>
+        <div class="collapse-content w-full max-w-4xl mx-auto p-1">
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <label class="block text-sm font-medium mb-1" for="userId"
+                >User</label
+              >
+              <input
+                type="text"
+                class="input input-bordered w-full"
+                id="userId"
+                name="userId" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-1" for="status"
+                >Status</label
+              >
+              <select
+                type="select"
+                class="select select-bordered w-full"
+                id="status"
+                name="status">
+                <option value="" selected></option>
+                <option>Success</option>
+                <option>Failed</option>
+                <option>200</option>
+                <option>403</option>
+                <option>404</option>
+                <option>500</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-1" for="startDate"
+                >Start Date</label
+              >
+              <input
+                type="date"
+                class="input input-bordered w-full"
+                id="startDate"
+                name="startDate" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-1" for="endDate"
+                >End Date</label
+              >
+              <input
+                type="date"
+                class="input input-bordered w-full"
+                id="endDate"
+                name="endDate" />
+            </div>
+          </div>
+        </div>
+      </details>
+    </form>
+
+    <p id="InfoMessage" class="text-center text-error"></p>
+    <div class="divider divider-neutral">Audit Events</div>
+
+    <div class="overflow-x-auto lg:px-8">
+      <table class="table table-sm table-zebra font-mono min-w-full">
+        <thead>
+          <tr>
+            <th>EventType</th>
+            <th>Operation</th>
+            <th>Target</th>
+            <th>AppName</th>
+            <th>UserId</th>
+            <th>Status</th>
+            <th>Trace</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+
+        <tbody id="audit_body">
+          {{ block "audit_body" . }}
+            {{ $count := len .Data.Events }}
+            {{ range $i, $e := .Data.Events }}
+              <tr
+                {{ if eq $count (add $i 1) }}
+                  hx-get="{{ $.Data.NextPage }}" hx-trigger="revealed"
+                  hx-swap="afterend" hx-indicator=".htmx-indicator"
+                {{ end }}>
+                <td>
+                  {{ $e.event_type }}
+                </td>
+                <td>
+                  {{ $e.operation }}
+                </td>
+                <td>
+                  {{ $e.target }}
+                </td>
+                <td>
+                  <div title="{{ $e.app_path }}">{{ $e.app_name }}</div>
+                </td>
+                <td>
+                  {{ $e.user_id }}
+                </td>
+                <td>
+                  <div title="{{ $e.detail }}">{{ $e.status }}</div>
+                </td>
+                <td class="text-center">
+                  <a
+                    title="See all events for this request"
+                    href="{{ $.AppPath }}/?rid={{ $e.rid }}"
+                    >🔍</a
+                  >
+                </td>
+                <td>
+                  {{ $e.create_time }}
+                </td>
+              </tr>
+            {{ end }}
+          {{ end }}
+          <!-- End of "audit_body" block -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex justify-center">
+      <img
+        id="spinner"
+        alt="Loading..."
+        class="htmx-indicator my-1"
+        src="{{ static "spinner.svg" }}" />
+    </div>
+  </body>
+</html>
