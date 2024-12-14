@@ -46,8 +46,9 @@
             class="input input-bordered w-full"
             id="appGlob"
             name="appGlob"
-            search
-            placeholder="all" />
+            placeholder="all"
+            onfocus="this.value=''"
+            onchange="this.blur();" />
 
           <datalist id="appList">
             {{ range .Data.Apps }}
@@ -78,10 +79,17 @@
             >Operation</label
           >
           <input
-            type="text"
+            list="opList"
             id="operation"
             name="operation"
-            class="input input-bordered w-full" />
+            class="input input-bordered w-full"
+            onfocus="this.value=''"
+            onchange="this.blur();" />
+          <datalist id="opList">
+            {{ range .Data.Operations }}
+              <option value="{{ . }}"></option>
+            {{ end }}
+          </datalist>
         </div>
 
         <div>
@@ -126,8 +134,9 @@
                 <option>Success</option>
                 <option>Failed</option>
                 <option>200</option>
+                <option>400</option>
+                <option>401</option>
                 <option>403</option>
-                <option>404</option>
                 <option>500</option>
               </select>
             </div>
@@ -164,7 +173,7 @@
     <div class="overflow-x-auto lg:px-8">
       <table class="table table-sm table-zebra font-mono min-w-full">
         <thead>
-          <tr>
+          <tr class="text-primary">
             <th>EventType</th>
             <th>Operation</th>
             <th>Target</th>

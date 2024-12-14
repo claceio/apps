@@ -6,6 +6,7 @@ app = ace.app("Clace Audit Events", custom_layout=True,
               ],
               permissions=[
                   ace.permission("clace.in", "list_all_apps"),
+                  ace.permission("clace.in", "list_operations"),
                   ace.permission("clace.in", "list_audit_events"),
               ],
               style=ace.style("daisyui", themes=["emerald", "night"])
@@ -18,6 +19,10 @@ def handler(req):
     all_apps = clace.list_all_apps(include_internal=True)
     if all_apps.error:
         ace.response(all_apps.error, code=500)
+
+    operations = clace.list_operations()
+    if operations.error:
+        ace.response(operations.error, code=500)
 
     ret = clace.list_audit_events(app_glob=query(req, "appGlob"),
                                      user_id=query(req, "userId"),
@@ -40,6 +45,7 @@ def handler(req):
     
     return {
         "Apps": all_apps.value,
+        "Operations": operations.value,
         "NextPage": nextPage,
         "Events": ret.value,
     }
