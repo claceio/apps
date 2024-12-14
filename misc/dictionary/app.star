@@ -14,6 +14,8 @@ def run(dry_run, args):
    if len(resp) == 0 or type(resp) != "list":
        return ace.result("Failed to get definition for " + args.word)
    word = resp[0]
+
+   ace.audit("word_lookup", args.word)
    
    if args.show == "basic":
        defs = ["Word : " + word["word"], "Phonetic: " + word.get("phonetic", "")]
