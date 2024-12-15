@@ -10,7 +10,7 @@ def run(dry_run, args):
       return ace.result(run_ret.error)
 
    load_ret = fs.serve_tmp_file(run_ret.value, name="num_" + args.file.rsplit("/", 1)[-1])
-   ace.audit("num_lines", load_ret.value.value.name)
+   ace.audit("num_lines", load_ret.value["name"])
    return ace.result("Added line numbers", [load_ret.value], report=ace.DOWNLOAD)
 
 app = ace.app("Number Lines",
