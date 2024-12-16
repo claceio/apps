@@ -16,7 +16,7 @@ def query(req, key):
     return req.Query.get(key)[0] if req.Query.get(key) else ""
 
 def handler(req):
-    all_apps = clace.list_all_apps(include_internal=True)
+    all_apps = clace.list_all_apps()
     if all_apps.error:
         ace.response(all_apps.error, code=500)
 
