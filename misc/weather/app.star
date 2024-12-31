@@ -46,7 +46,7 @@ def weather(dry_run, args, forecast=False):
 
   if forecast:
     fl = resp.json()["forecast"]["forecastday"]
-    return ace.result("Forecast" if forecast else "Current" + " weather for " + args.city, 
+    return ace.result("Forecast weather for " + args.city, 
             [get_forecast(args, fl[0]), get_forecast(args, fl[1]), get_forecast(args, fl[2])], report=ace.TABLE)
   else:
     return ace.result("Current weather for " + args.city, [get_weather(args, resp.json()["current"])], report=ace.TABLE)
