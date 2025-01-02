@@ -134,19 +134,19 @@
                   <p
                     class="text-left text-warning"
                     title="Staged changes to be promoted">
-                    Ver&nbsp;&nbsp;:
+                    Ver&nbsp;:
                     {{ .version }}
                   </p>
                 {{ else }}
                   <p class="text-left text-success" title="No staged changes">
-                    Ver&nbsp;&nbsp;:
+                    Ver&nbsp;:
                     {{ .version }}
                   </p>
                 {{ end }}
               {{ end }}
               {{ if ne .spec "" }}
                 <p class="text-left break-anywhere">
-                  Spec&nbsp;:
+                  Spec:
                   {{ .spec }}
                 </p>
               {{ end }}
@@ -163,7 +163,7 @@
           {{ if ne .git_sha "" }}
             <div class="tooltip break-words" data-tip="{{ .git_message }}">
               <p class="text-left text-xs font-mono">
-                SHA&nbsp;&nbsp;:
+                SHA&nbsp;:
                 {{ .git_sha }}
               </p>
             </div>
