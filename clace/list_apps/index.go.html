@@ -163,8 +163,7 @@
           {{ if ne .git_sha "" }}
             <div class="tooltip break-words" data-tip="{{ .git_message }}">
               <p class="text-left text-xs font-mono">
-                SHA&nbsp;:
-                {{ .git_sha }}
+                SHA:{{ .git_sha }}
               </p>
             </div>
           {{ end }}
