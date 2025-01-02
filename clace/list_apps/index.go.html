@@ -152,12 +152,22 @@
             </div>
           </div>
 
-          {{ if ne .source_url "-" }}
-            <div class="tooltip" data-tip="Source Code Path">
-              <code class="block text-left text-sm break-words">
-                {{ .source_url }}
-              </code>
-            </div>
+          {{ if and (ne .source "-") (ne .source "") }}
+            {{ if eq .source_url "" }}
+              <div class="tooltip" data-tip="Source Code Path">
+                <code class="block text-left text-sm break-words">
+                  {{ .source }}
+                </code>
+              </div>
+            {{ else }}
+              <a
+                title="Source Code Path"
+                class="link link-secondary"
+                href="{{ .source_url }}"
+                target="_blank">
+                {{ .source }}
+              </a>
+            {{ end }}
           {{ end }}
         </div>
       </div>
