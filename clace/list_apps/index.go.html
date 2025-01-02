@@ -128,14 +128,27 @@
 
           <div class="flex items-center justify-between w-full">
             <div class="text-xs font-mono">
+              <br />
+              {{ if ne .version 0 }}
+                {{ if .version_mismatch }}
+                  <p
+                    class="text-left text-warning"
+                    title="Staged changes to be promoted">
+                    Version&nbsp;:
+                    {{ .version }}
+                  </p>
+                {{ else }}
+                  <p class="text-left text-success" title="No staged changes">
+                    Version&nbsp;:
+                    {{ .version }}
+                  </p>
+                {{ end }}
+              {{ end }}
               {{ if ne .spec "" }}
                 <p class="text-left break-anywhere">
                   Spec&nbsp;&nbsp;&nbsp;&nbsp;:
                   {{ .spec }}
                 </p>
-              {{ end }}
-              {{ if ne .version 0 }}
-                <p class="text-left">Version&nbsp;: {{ .version }}</p>
               {{ end }}
               {{ if ne .git_sha "" }}
                 <div class="tooltip break-words" data-tip="{{ .git_message }}">
