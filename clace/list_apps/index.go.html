@@ -150,20 +150,24 @@
                   {{ .spec }}
                 </p>
               {{ end }}
-              {{ if ne .git_sha "" }}
-                <div class="tooltip break-words" data-tip="{{ .git_message }}">
-                  <p class="text-left">Commit&nbsp;&nbsp;: {{ .git_sha }}</p>
-                </div>
-              {{ end }}
+
             </div>
 
-            <!-- Right-aligned button -->
             <div class="justify-right">
               <a href="{{ .url }}" target="_blank">
                 <button class="btn btn-primary btn-sm">Open</button>
               </a>
             </div>
           </div>
+
+          {{ if ne .git_sha "" }}
+            <div class="tooltip break-words" data-tip="{{ .git_message }}">
+              <p class="text-left text-xs font-mono">
+                Commit&nbsp;&nbsp;:
+                {{ .git_sha }}
+              </p>
+            </div>
+          {{ end }}
 
           {{ if and (ne .source "-") (ne .source "") }}
             {{ if eq .source_url "" }}
