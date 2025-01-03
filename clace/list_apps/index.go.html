@@ -121,7 +121,7 @@
           </div>
 
           <div class="tooltip" data-tip="App Path">
-            <div class="text-left text-cyan-500 text-lg break-words">
+            <div class="text-left text-primary text-lg break-words">
               {{ .path }}
             </div>
           </div>
@@ -134,19 +134,19 @@
                   <p
                     class="text-left text-warning"
                     title="Staged changes to be promoted">
-                    Ver&nbsp;:
+                    Version&nbsp;:
                     {{ .version }}
                   </p>
                 {{ else }}
-                  <p class="text-left text-success" title="No staged changes">
-                    Ver&nbsp;:
+                  <p class="text-left" title="No staged changes">
+                    Version&nbsp;:
                     {{ .version }}
                   </p>
                 {{ end }}
               {{ end }}
               {{ if ne .spec "" }}
                 <p class="text-left break-anywhere">
-                  Spec:
+                  Spec&nbsp;&nbsp;&nbsp;&nbsp;:
                   {{ .spec }}
                 </p>
               {{ end }}
@@ -155,7 +155,7 @@
 
             <div class="justify-right">
               <a href="{{ .url }}" target="_blank">
-                <button class="btn btn-primary btn-sm">Open</button>
+                <button class="btn btn-secondary btn-sm">Open</button>
               </a>
             </div>
           </div>
@@ -163,7 +163,7 @@
           {{ if ne .git_sha "" }}
             <div class="tooltip break-words" data-tip="{{ .git_message }}">
               <p class="text-left text-xs font-mono">
-                SHA:{{ .git_sha }}
+                Sha:{{ .git_sha }}
               </p>
             </div>
           {{ end }}
