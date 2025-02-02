@@ -2,7 +2,7 @@ load ("http.in", "http")
 
 def get_url(command, query):
     query = query.replace(" ", "-")
-    url = 'https://api.weatherapi.com/v1/%s.json?key={{ secret "prop" "weatherapi_key"}}&q=%s' % (command, query)
+    url = 'https://api.weatherapi.com/v1/%s.json?key={{ secret "default" "weatherapi_key"}}&q=%s' % (command, query)
     if command == "forecast":
         url += "&days=3"
     return url
@@ -70,5 +70,5 @@ app = ace.app("Weather",
       ace.action("Forecast Weather", "/forecast", lambda dry_run, args: weather(dry_run, args, True), suggest, description="Forecast weather for city"),
       ace.action("Alerts", "/alerts", alerts, suggest, description="Alerts for city", hidden=["unit"])
    ],
-   permissions=[ace.permission("http.in", "get")]
+   permissions=[ace.permission("http.in", "get"), secrets=[["weatherapi_key"]]]
 )
