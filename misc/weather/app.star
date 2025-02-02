@@ -70,5 +70,5 @@ app = ace.app("Weather",
       ace.action("Forecast Weather", "/forecast", lambda dry_run, args: weather(dry_run, args, True), suggest, description="Forecast weather for city"),
       ace.action("Alerts", "/alerts", alerts, suggest, description="Alerts for city", hidden=["unit"])
    ],
-   permissions=[ace.permission("http.in", "get"), secrets=[["weatherapi_key"]]]
+   permissions=[ace.permission("http.in", "get", secrets=[["weatherapi_key"]])]
 )
