@@ -68,7 +68,9 @@
         <div class="card-body">
           <div class="flex justify-between">
             <!-- Text Label -->
-            <div class="text-left tooltip break-words" data-tip="{{ .path }}">
+            <div
+              class="text-left tooltip break-words"
+              data-tip="{{ .name }} at {{ .path }}">
               <span class="text-left text-xl font-bold text-primary"
                 >{{ substr 0 30 .name }}</span
               >
