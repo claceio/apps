@@ -15,9 +15,12 @@ def handler(req):
     query = query[0] if query else ""
     internal = req.Query.get("internal")
     internal = internal[0] == "true" if internal else False
+    path = req.Query.get("path")
+    path = path[0] if path else ""
 
     return {
         "query": query,
         "internal": internal,
-        "apps": clace.list_apps(query, internal).value
+        "path": path,
+        "apps": clace.list_apps(query, path, internal).value
     }

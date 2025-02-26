@@ -46,6 +46,8 @@
       {{ if ne .Data.query "" }}value="{{ .Data.query }}"{{ end }}
       placeholder="Search apps..." />
   </div>
+
+  <input type="hidden" name="path" id="path" value="{{ .Data.path }}" />
 </form>
 
 <p id="InfoMessage" class="text-center"></p>
@@ -66,7 +68,7 @@
         <div class="card-body">
           <div class="flex justify-between">
             <!-- Text Label -->
-            <div class="text-left tooltip break-words" data-tip="{{ .name }}">
+            <div class="text-left tooltip break-words" data-tip="{{ .path }}">
               <span class="text-left text-xl font-bold text-primary"
                 >{{ substr 0 30 .name }}</span
               >
@@ -120,10 +122,20 @@
             </div>
           </div>
 
-          <div class="tooltip" data-tip="App Path">
-            <div class="text-left text-primary text-lg break-words">
-              {{ .path }}
-            </div>
+          <div>
+            {{ $app := . }}
+            {{ range $i, $p := .path_split }}
+              <a
+                class="link link-primary text-left text-primary text-lg break-words"
+                title="Filter apps at {{ index $app.path_split_glob $i }}"
+                href="{{ $.AppPath }}?path={{ index $app.path_split_glob $i }}">
+                {{ if ne (printf "%c" (index $p 0)) "/" }}
+                  🌐 {{ $p }}:
+                {{ else }}
+                  {{ $p }}
+                {{ end }}
+              </a>
+            {{ end }}
           </div>
 
           <div class="flex items-center justify-between w-full">
