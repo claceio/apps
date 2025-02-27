@@ -124,20 +124,28 @@
             </div>
           </div>
 
-          <div>
+          <div class="breadcrumbs text-sm">
             {{ $app := . }}
-            {{ range $i, $p := .path_split }}
-              <a
-                class="link link-primary text-left text-primary text-lg break-words"
-                title="Filter apps at {{ index $app.path_split_glob $i }}"
-                href="{{ $.AppPath }}?path={{ index $app.path_split_glob $i }}">
-                {{ if ne (printf "%c" (index $p 0)) "/" }}
-                  🌐 {{ $p }}:
-                {{ else }}
-                  {{ $p }}
-                {{ end }}
-              </a>
-            {{ end }}
+            <ul class="flex flex-wrap">
+              {{ range $i, $p := .path_split }}
+                <li>
+                  <a
+                    class="link link-primary text-left text-primary break-words"
+                    title="Filter apps at {{ index $app.path_split_glob $i }}"
+                    href="{{ $.AppPath }}?path={{ index $app.path_split_glob $i }}">
+                    {{ if ne (printf "%c" (index $p 0)) "/" }}
+                      🌐 {{ $p }}:
+                    {{ else }}
+                      {{ if eq $i (sub (len $app.path_split) 1) }}
+                        {{ $p }}
+                      {{ else }}
+                        📂 {{ $p }}:
+                      {{ end }}
+                    {{ end }}
+                  </a>
+                </li>
+              {{ end }}
+            </ul>
           </div>
 
           <div class="flex items-center justify-between w-full">
