@@ -2,7 +2,7 @@ load ("http.in", "http")
 
 def get_url(command, query):
     query = query.replace(" ", "-")
-    url = 'https://api.weatherapi.com/v1/%s.json?key={{ secret "default" "weatherapi_key"}}&q=%s' % (command, query)
+    url = 'https://api.weatherapi.com/v1/%s.json?key={{ secret "weatherapi_key"}}&q=%s' % (command, query)
     if command == "forecast":
         url += "&days=3"
     return url
