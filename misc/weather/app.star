@@ -12,9 +12,6 @@ def suggest(args):
     return "City has to be specified partially"
 
   resp = http.get(get_url("search", args.city)).value
-  if resp.status_code != 200:
-     return "Failed to get weather for " + args.city + " : " + resp.body()
-
   return {"city": [city["url"] for city in resp.json()]}
 
 def alerts(dry_run, args):
@@ -22,9 +19,6 @@ def alerts(dry_run, args):
     return ace.result("Validation failed", param_errors={"city": "City has to be specified"})
 
   resp = http.get(get_url("alerts", args.city)).value
-  if resp.status_code != 200:
-     return "Failed to get alerts for " + args.city + " : " + resp.body()
-
   if args.detail:
      return ace.result("Alerts for " + args.city, [resp.json()], ace.JSON)
 
@@ -38,9 +32,6 @@ def weather(dry_run, args, forecast=False):
     return ace.result("Validation failed", param_errors={"city": "City has to be specified"})
 
   resp = http.get(get_url("forecast" if forecast else "current", args.city)).value
-  if resp.status_code != 200:
-     return "Failed to get weather for " + args.city + " : " + resp.body()
-
   if args.detail:
      return ace.result("Forecast" if forecast else "Current" + " weather for " + args.city, [resp.json()], ace.JSON)
 
