@@ -72,8 +72,11 @@
               class="text-left tooltip break-words"
               data-tip="{{ .name }} at {{ .path }}">
               <span class="text-left text-xl font-bold text-primary"
-                >{{ substr 0 30 .name }}</span
-              >
+                >{{ substr 0 30 .name }}
+                {{ if .is_stage }}
+                  (Staging)
+                {{ end }}
+              </span>
             </div>
 
             <!-- SVG Icons Wrapper -->
@@ -191,10 +194,14 @@
           {{ end }}
 
           {{ if and (ne .source "-") (ne .source "") }}
+            {{ $source_path := .source }}
+            {{ if ne .star_base "" }}
+              {{ $source_path = (printf "%s#%s" .source .star_base) }}
+            {{ end }}
             {{ if eq .source_url "" }}
               <div class="tooltip" data-tip="Source Code Path">
                 <code class="block text-left text-sm break-words">
-                  {{ .source }}
+                  {{ $source_path }}
                 </code>
               </div>
             {{ else }}
@@ -203,7 +210,7 @@
                 class="link link-secondary"
                 href="{{ .source_url }}"
                 target="_blank">
-                {{ .source }}
+                {{ $source_path }}
               </a>
             {{ end }}
           {{ end }}
